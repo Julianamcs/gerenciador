@@ -22,38 +22,37 @@ import ber.com.alura.gerenciador.acao.RemoveEmpresas;
  */
 @WebServlet("/entrada")
 public class UnicaEntradaServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
-   
-	/**
-	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		String parmAcao = request.getParameter("acao");
-		
-		String nomeClasse = "ber.com.alura.gerenciador.acao." + parmAcao;
-		
-		String nome;
-		try {
-			Class classe = Class.forName(nomeClasse);//carrega a classe com o nome da classe
-			
-			Acao acao = (Acao) classe.newInstance(); 
-			
-			nome = acao.executa(request, response);
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			throw new ServletException(e);
-		}
-		
-		String[] tipoEEndereco = nome.split(":");
-		if(tipoEEndereco[0].equals("forward")) {
-		RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/view/" + tipoEEndereco[1]);
-		rd.forward(request, response);
-		}else {
-			response.sendRedirect(tipoEEndereco[1]);
-		}
-	}
-	
+	 private static final long serialVersionUID = 1L;
 
-}
+	    protected void service(HttpServletRequest request, HttpServletResponse response) 
+	            throws ServletException, IOException {
+
+	        String paramAcao = request.getParameter("acao");
+
+	        String nomeDaClasse = "ber.com.alura.gerenciador.acao." + 
+	            paramAcao;
+
+	        String nome;
+	        try {
+	            Class classe = Class.forName(nomeDaClasse); 
+	            Acao acao = (Acao) classe.newInstance();
+	            nome = acao.executa(request,response);
+	        } catch (ClassNotFoundException | 
+	                InstantiationException | 
+	                IllegalAccessException e) {
+	            throw new ServletException(e);
+	        }
+
+	        String[] tipoEEndereco = nome.split(":");
+	        if(tipoEEndereco[0].equals("forward")) {
+	            RequestDispatcher rd = 
+	                request.getRequestDispatcher("WEB-INF/view/" + tipoEEndereco[1]);
+	            rd.forward(request, response);
+	        } else {
+	            response.sendRedirect(tipoEEndereco[1]);
+	        }        
+	    }
+
+	}
+
+
